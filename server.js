@@ -7,7 +7,9 @@ const { URL } = require("url");
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
 const ROOT = __dirname;
-const PUBLIC_DIR = path.join(ROOT, "public");
+const PUBLIC_DIR = fs.existsSync(path.join(ROOT, "public"))
+  ? path.join(ROOT, "public")
+  : ROOT;
 const DATA_DIR = process.env.DATA_DIR
   ? path.resolve(process.env.DATA_DIR)
   : path.join(ROOT, "data");
