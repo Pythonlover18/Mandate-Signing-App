@@ -1,0 +1,9 @@
+{
+  "name": "business-mandate-crm",
+  "version": "1.0.0",
+  "description": "Internal CRM for signed mandates and financing pipeline",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "fullName": "System Admin",
+      "email": "admin@crm.local",
+      "passwordHash": "5ef63e0c22f9bbb46962f818dbc3861d:84175a963387319ad90c59ce9c64f4c59c7952a75f1b0e7d3cb10b7b5be7acdad0b89d3d7a0d5ddee740debb50cea9fd9b1ff068d283fdc252d1cc577888f5cf",
+      "role": "admin",
+      "createdAt": "2026-04-27T20:18:03.067Z"
+    },
+    {
+      "id": 2,
+      "fullName": "Reyaansh Dugad",
+      "email": "reyaanshdugad2008@gmail.com",
+      "passwordHash": "71e514a83e2512ef9883e4f4c9342d51:4026035f1605b0a0c3628fcba42f3f383c3a802f4ecdebaa936dbbfbda8c04077360544dd2c61e944a939f953ad8ead57cb43f4600160155f4a946d883e0f7d1",
+      "role": "employee",
+      "createdAt": "2026-04-27T20:48:00.472Z"
+    }
+  ],
+  "pipelineItems": [],
+  "signedMandates": [],
+  "counters": {
+    "user": 2,
+    "pipeline": 0,
+    "mandate": 0,
+    "track": 0
+  }
+}
