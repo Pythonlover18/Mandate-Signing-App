@@ -17,6 +17,10 @@
       mandateType: "",
       ownerId: ""
     },
+    pipelineFilters: {
+      requirementType: "",
+      ownerId: ""
+    },
     flashError: "",
     flashSuccess: ""
   };
@@ -229,7 +233,23 @@
   }
 
   function renderPipelineTab() {
-    const list = state.pipeline.slice().sort((a, b) => b.id - a.id);
+    const sorted = state.pipeline.slice().sort((a, b) => b.id - a.id);
+    const list =
+      state.user.role === "admin"
+        ? sorted.filter((item) => {
+            const typeOk =
+              !state.pipelineFilters.requirementType ||
+              item.requirementType === state.pipelineFilters.requirementType;
+            const ownerOk =
+              !state.pipelineFilters.ownerId || item.ownerId === Number(state.pipelineFilters.ownerId);
+            return typeOk && ownerOk;
+          })
+        : sorted;
+    const noPipelineMessage =
+      state.user.role === "admin" &&
+      (state.pipelineFilters.requirementType || state.pipelineFilters.ownerId)
+        ? "No pipeline entries found for selected filters."
+        : "No pipeline entries yet.";
     return `
       <div class="grid-main">
         <section class="card panel">
@@ -313,6 +333,32 @@
             <h2>Pipeline Tracker</h2>
             <span class="subtle">${list.length} records</span>
           </div>
+          ${
+            state.user.role === "admin"
+              ? `
+                  <div class="row cols-2">
+                    <label>Filter by Mandate Type
+                      <select data-pipeline-filter="requirementType">
+                        <option value="">All</option>
+                        ${mandateTypeOptions
+                          .map((opt) =>
+                            optionMarkup(opt.value, opt.label, state.pipelineFilters.requirementType)
+                          )
+                          .join("")}
+                      </select>
+                    </label>
+                    <label>Filter by Employee
+                      <select data-pipeline-filter="ownerId">
+                        <option value="">All employees</option>
+                        ${state.users
+                          .map((u) => optionMarkup(String(u.id), u.fullName, state.pipelineFilters.ownerId))
+                          .join("")}
+                      </select>
+                    </label>
+                  </div>
+                `
+              : ""
+          }
           <div class="table-wrap">
             <table>
               <thead>
@@ -332,7 +378,7 @@
                 ${
                   list.length
                     ? list.map((item, index) => renderPipelineRow(item, index)).join("")
-                    : '<tr><td colspan="9" class="subtle">No pipeline entries yet.</td></tr>'
+                    : `<tr><td colspan="9" class="subtle">${escapeHtml(noPipelineMessage)}</td></tr>`
                 }
               </tbody>
             </table>
@@ -1345,6 +1391,16 @@
   function onChange(event) {
     const target = event.target;
     if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    if (target.matches("select[data-pipeline-filter]")) {
+      const key = target.getAttribute("data-pipeline-filter");
+      if (!key) {
+        return;
+      }
+      state.pipelineFilters[key] = target.value;
+      render();
       return;
     }
 
