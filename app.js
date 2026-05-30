@@ -1525,11 +1525,20 @@
   }
 
   function cloneArray(source, fallbackFactory) {
-    if (!Array.isArray(source) || source.length === 0) {
-      return fallbackFactory();
-    }
+  if (Array.isArray(source) && source.length > 0) {
     return source.map((item) => ({ ...item }));
   }
+
+  if (typeof fallbackFactory === "function") {
+    return fallbackFactory();
+  }
+
+  if (Array.isArray(fallbackFactory)) {
+    return fallbackFactory.map((item) => ({ ...item }));
+  }
+
+  return [];
+}
 
   function optionMarkup(value, label, selectedValue) {
     const selected = String(value) === String(selectedValue) ? "selected" : "";
